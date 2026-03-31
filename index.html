@@ -1,1 +1,179 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Guia de Profissionais - Jd Maria Rosa</title>
+    <style>
+        :root { --azul: #004a99; --azul-claro: #eef2f7; --verde: #25d366; }
+        body { margin: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #f4f7f9; color: #333; }
+        
+        header { background: var(--azul); color: white; padding: 30px 20px; text-align: center; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
+        header h1 { margin: 0; font-size: 22px; text-transform: uppercase; }
 
+        /* Formulário de Cadastro */
+        .sessao-cadastro { max-width: 450px; margin: -30px auto 20px; background: white; padding: 25px; border-radius: 15px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); position: relative; z-index: 5; }
+        .sessao-cadastro h2 { color: var(--azul); text-align: center; font-size: 16px; text-transform: uppercase; margin-bottom: 20px; border-bottom: 2px solid var(--azul-claro); padding-bottom: 10px; }
+        
+        .campo { margin-bottom: 15px; }
+        .campo label { display: block; font-weight: bold; font-size: 12px; margin-bottom: 5px; color: #666; }
+        .campo input, .campo select { width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 8px; box-sizing: border-box; font-size: 14px; transition: border 0.3s; }
+        .campo input:focus { border-color: var(--azul); outline: none; }
+        
+        .btn-publicar { width: 100%; background: var(--azul); color: white; border: none; padding: 15px; border-radius: 8px; font-weight: bold; cursor: pointer; text-transform: uppercase; font-size: 14px; transition: 0.3s; }
+        .btn-publicar:hover { background: #003366; }
+        .btn-publicar:disabled { background: #ccc; cursor: not-allowed; }
+
+        /* Área de Filtros */
+        .filtros { display: flex; overflow-x: auto; padding: 15px 20px; gap: 10px; background: white; border-bottom: 1px solid #eee; position: sticky; top: 0; z-index: 10; }
+        .filtros::-webkit-scrollbar { display: none; }
+        .btn-filtro { background: var(--azul-claro); border: none; padding: 10px 18px; border-radius: 25px; white-space: nowrap; cursor: pointer; color: var(--azul); font-weight: bold; font-size: 13px; transition: 0.2s; }
+        .btn-filtro.ativo { background: var(--azul); color: white; }
+
+        /* Grid de Exibição */
+        .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 20px; padding: 25px; }
+        .card { background: white; border-radius: 12px; padding: 20px; box-shadow: 0 4px 6px rgba(0,0,0,0.05); border-top: 5px solid var(--azul); display: flex; flex-direction: column; justify-content: space-between; }
+        .tag { font-size: 10px; background: #f0f0f0; padding: 4px 8px; border-radius: 5px; font-weight: 800; text-transform: uppercase; color: #555; align-self: flex-start; }
+        .nome-prof { font-size: 20px; font-weight: bold; margin: 15px 0; color: #111; }
+        
+        .btn-zap { display: flex; align-items: center; justify-content: center; gap: 10px; background: var(--verde); color: white; text-align: center; padding: 12px; border-radius: 8px; text-decoration: none; font-weight: bold; font-size: 15px; }
+        .btn-zap:hover { background: #1ebe57; }
+
+        #msg-vazio { text-align: center; width: 100%; color: #999; padding: 40px; font-style: italic; }
+    </style>
+</head>
+<body>
+
+<header>
+    <h1>GUIA DE PROFISSIONAIS</h1>
+</header>
+
+<div class="sessao-cadastro">
+    <h2>Nova Indicação</h2>
+    <form id="formIndicar">
+        <div class="campo"><label>Seu Nome</label><input type="text" name="morador" placeholder="Ex: Maria" required></div>
+        <div class="campo"><label>Apartamento</label><input type="text" name="apartamento" placeholder="Ex: 12-B" required></div>
+        <div class="campo">
+            <label>Categoria</label>
+            <select name="profissional" required>
+                <option value="">Selecione a categoria...</option>
+                <option value="Eletricista">Eletricista</option>
+                <option value="Encanador">Encanador</option>
+                <option value="Faxineira">Faxineira</option>
+                <option value="Marceneiro">Marceneiro</option>
+                <option value="Costureira">Costureira</option>
+                <option value="Pintor">Pintor</option>
+                <option value="Pedreiro">Pedreiro</option>
+                <option value="Marido de Aluguel">Marido de Aluguel</option>
+                <option value="Outros">Outros</option>
+            </select>
+        </div>
+        <div class="campo"><label>Nome do Profissional</label><input type="text" name="nomeProfissional" placeholder="Ex: João Silva" required></div>
+        <div class="campo"><label>WhatsApp do Profissional</label><input type="text" name="telefone" placeholder="DDD + Número (só números)" required></div>
+        
+        <button type="submit" class="btn-publicar" id="btnEnviar">Publicar Agora</button>
+    </form>
+</div>
+
+<div class="filtros" id="botoesFiltros">
+    <button class="btn-filtro ativo" onclick="filtrar('Todos', this)">Todos</button>
+</div>
+
+<div class="grid" id="lista">
+    <div id="msg-vazio">Carregando indicações...</div>
+</div>
+
+<script>
+    const URL_SCRIPT = "https://script.google.com/macros/s/AKfycbycDL3j01TseI3WzpeV5JuYAlfbldvnEvxTCqLxtPEsACafpLEVqi4jXqNfl204W6PSXQ/exec"; 
+    let dadosGerais = [];
+
+    async function buscarDados() {
+        try {
+            const res = await fetch(URL_SCRIPT);
+            dadosGerais = await res.json();
+            
+            // Removemos as linhas que não tem Categoria ou Contato preenchido
+            dadosGerais = dadosGerais.filter(i => i.Categoria && i.Contato);
+            
+            renderizar(dadosGerais);
+            gerarFiltros(dadosGerais);
+        } catch (e) { 
+            console.error(e);
+            document.getElementById('msg-vazio').innerText = "Erro ao carregar dados.";
+        }
+    }
+
+    function gerarFiltros(dados) {
+        const cats = [...new Set(dados.map(i => i.Categoria))].sort();
+        const btnF = document.getElementById('botoesFiltros');
+        // Mantém apenas o botão "Todos" e adiciona os outros
+        btnF.innerHTML = '<button class="btn-filtro ativo" onclick="filtrar(\'Todos\', this)">Todos</button>';
+        cats.forEach(c => {
+            btnF.innerHTML += `<button class="btn-filtro" onclick="filtrar('${c}', this)">${c}</button>`;
+        });
+    }
+
+    function renderizar(dados) {
+        const lista = document.getElementById('lista');
+        if(dados.length === 0) {
+            lista.innerHTML = '<div id="msg-vazio">Nenhum profissional encontrado nesta categoria.</div>';
+            return;
+        }
+        
+        lista.innerHTML = dados.map(item => `
+            <div class="card">
+                <div>
+                    <span class="tag">${item.Categoria}</span>
+                    <span class="nome-prof">${item.Contato}</span>
+                </div>
+                <a href="https://wa.me/55${item.Telefone.replace(/\D/g,'')}" class="btn-zap" target="_blank">
+                    <span>📱 Chamar no WhatsApp</span>
+                </a>
+            </div>
+        `).join('');
+    }
+
+    function filtrar(cat, elemento) {
+        document.querySelectorAll('.btn-filtro').forEach(b => b.classList.remove('ativo'));
+        elemento.classList.add('ativo');
+        
+        if(cat === 'Todos') renderizar(dadosGerais);
+        else renderizar(dadosGerais.filter(i => i.Categoria === cat));
+    }
+
+    document.getElementById('formIndicar').onsubmit = async (e) => {
+        e.preventDefault();
+        const btn = document.getElementById('btnEnviar');
+        btn.innerText = "Enviando para a planilha...";
+        btn.disabled = true;
+        
+        const formData = new FormData(e.target);
+        const objeto = {
+            morador: formData.get('morador'),
+            apartamento: formData.get('apartamento'),
+            profissional: formData.get('profissional'),
+            nomeProfissional: formData.get('nomeProfissional'),
+            telefone: formData.get('telefone')
+        };
+        
+        try {
+            await fetch(URL_SCRIPT, {
+                method: 'POST',
+                mode: 'no-cors', // Importante para evitar erro de CORS no Apps Script
+                body: JSON.stringify(objeto)
+            });
+            
+            alert("Sucesso! A indicação foi enviada para o administrador.");
+            location.reload(); 
+        } catch (err) {
+            alert("Ocorreu um erro ao enviar. Verifique sua internet.");
+            btn.innerText = "Publicar Agora";
+            btn.disabled = false;
+        }
+    };
+
+    buscarDados();
+</script>
+
+</body>
+</html>

@@ -6,10 +6,12 @@
     <title>Guia de Profissionais - Jd Maria Rosa</title>
     <style>
         :root { --azul: #004a99; --azul-claro: #eef2f7; --verde: #25d366; }
-        body { margin: 0; font-family: 'Segoe UI', sans-serif; background: #f4f7f9; color: #333; }
+        body { margin: 0; font-family: 'Segoe UI', Tahoma, sans-serif; background: #f4f7f9; color: #333; }
+        
         header { background: var(--azul); color: white; padding: 25px; text-align: center; box-shadow: 0 2px 8px rgba(0,0,0,0.1); }
         header h1 { margin: 0; font-size: 20px; text-transform: uppercase; letter-spacing: 1px; }
 
+        /* Formulário */
         .sessao-cadastro { max-width: 450px; margin: 20px auto; background: white; padding: 25px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
         .sessao-cadastro h2 { color: var(--azul); text-align: center; font-size: 16px; margin-top: 0; border-bottom: 2px solid var(--azul-claro); padding-bottom: 10px; text-transform: uppercase; }
         
@@ -22,17 +24,20 @@
         .btn-publicar:hover { background: #003366; }
         .btn-publicar:disabled { background: #ccc; cursor: not-allowed; }
 
+        /* Filtros */
         .filtros { display: flex; overflow-x: auto; padding: 15px; gap: 10px; background: white; border-bottom: 1px solid #ddd; position: sticky; top: 0; z-index: 10; }
         .filtros::-webkit-scrollbar { display: none; }
         .btn-filtro { background: var(--azul-claro); border: none; padding: 10px 20px; border-radius: 25px; white-space: nowrap; cursor: pointer; color: var(--azul); font-weight: bold; font-size: 13px; }
         .btn-filtro.ativo { background: var(--azul); color: white; }
 
+        /* Lista de Cards */
         .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 15px; padding: 20px; }
-        .card { background: white; border-radius: 10px; padding: 20px; box-shadow: 0 2px 5px rgba(0,0,0,0.05); border-top: 5px solid var(--azul); display: flex; flex-direction: column; justify-content: space-between; }
+        .card { background: white; border-radius: 10px; padding: 20px; box-shadow: 0 2px 5px rgba(0,0,0,0.05); border-top: 5px solid var(--azul); display: flex; flex-direction: column; justify-content: space-between; min-height: 140px; }
         .tag { font-size: 10px; background: #eee; padding: 4px 8px; border-radius: 4px; font-weight: bold; text-transform: uppercase; color: #666; align-self: flex-start; }
-        .nome-prof { font-size: 19px; font-weight: bold; margin: 12px 0; color: #111; }
+        .nome-prof { font-size: 19px; font-weight: bold; margin: 12px 0; color: #111; display: block; }
         .btn-zap { display: block; background: var(--verde); color: white; text-align: center; padding: 12px; border-radius: 8px; text-decoration: none; font-weight: bold; transition: 0.3s; }
         .btn-zap:hover { opacity: 0.9; }
+        
         #msg-vazio { text-align: center; width: 100%; color: #999; padding: 30px; font-style: italic; }
     </style>
 </head>
@@ -43,11 +48,11 @@
 </header>
 
 <div class="sessao-cadastro">
-    <h2>Nova Indicação</h2>
+    <h2>Indicar um Profissional</h2>
     <form id="formIndicar">
         <div class="campo">
             <label>Seu Nome (Obrigatório)</label>
-            <input type="text" name="morador" placeholder="Ex: João Silva" required>
+            <input type="text" name="morador" placeholder="Seu nome para controle" required>
         </div>
         <div class="campo">
             <label>Seu Apartamento (Obrigatório)</label>
@@ -57,25 +62,34 @@
             <label>Categoria (Obrigatório)</label>
             <select name="profissional" required>
                 <option value="">Selecione...</option>
-                <option value="Eletricista">Eletricista</option>
-                <option value="Encanador">Encanador</option>
-                <option value="Faxineira">Faxineira</option>
-                <option value="Marceneiro">Marceneiro</option>
+                <option value="Azulejista">Azulejista</option>
+                <option value="Carpinteiro">Carpinteiro</option>
+                <option value="Chaveiro">Chaveiro</option>
                 <option value="Costureira">Costureira</option>
-                <option value="Pintor">Pintor</option>
-                <option value="Pedreiro">Pedreiro</option>
+                <option value="Eletricista">Eletricista</option>
+                <option value="Encanador / Bombeiro">Encanador / Bombeiro</option>
+                <option value="Faxineira">Faxineira</option>
+                <option value="Gesseiro">Gesseiro</option>
+                <option value="Marceneiro">Marceneiro</option>
                 <option value="Marido de Aluguel">Marido de Aluguel</option>
-                <option value="Carreto">Carreto</option>
+                <option value="Pedreiro">Pedreiro</option>
+                <option value="Pintor">Pintor</option>
+                <option value="Serralheiro">Serralheiro</option>
+                <option value="Técnico em Ar-condicionado">Técnico em Ar-condicionado</option>
+                <option value="Técnico em Eletrodomésticos">Técnico em Eletrodomésticos</option>
+                <option value="Técnico em Geladeira">Técnico em Geladeira</option>
+                <option value="Técnico em Máquina de Lavar">Técnico em Máquina de Lavar</option>
+                <option value="Vidraceiro">Vidraceiro</option>
                 <option value="Outros">Outros</option>
             </select>
         </div>
         <div class="campo">
             <label>Nome do Profissional (Obrigatório)</label>
-            <input type="text" name="nomeProfissional" placeholder="Nome do indicado" required>
+            <input type="text" name="nomeProfissional" placeholder="Nome de quem você indica" required>
         </div>
         <div class="campo">
             <label>WhatsApp (Obrigatório)</label>
-            <input type="text" name="telefone" placeholder="DDD + Número" required>
+            <input type="text" name="telefone" placeholder="Somente números com DDD" required>
         </div>
         <button type="submit" class="btn-publicar" id="btnEnviar">Publicar Indicação</button>
     </form>
@@ -86,23 +100,25 @@
 </div>
 
 <div class="grid" id="lista">
-    <div id="msg-vazio">Carregando indicações...</div>
+    <div id="msg-vazio">Buscando indicações...</div>
 </div>
 
 <script>
-    const URL_SCRIPT = "https://script.google.com/macros/s/AKfycbxMImEwtRNMkn0P3TEi89l-xnJnyz5ekEZALectmP_dlYIfVTL-5TT5OQkTCZrigHH_UQ/exec"; 
+    // URL OFICIAL DO SEU APPS SCRIPT
+    const URL_SCRIPT = "https://script.google.com/macros/s/AKfycbz3r-SbmkbGMN8w2TGv64eVUrlGPooHamByuMgO-myv2q8q3Upb8NK3DafDAZkBlo66Mw/exec"; 
+    
     let dadosGerais = [];
 
     async function buscarDados() {
         try {
             const res = await fetch(URL_SCRIPT);
             const rawData = await res.json();
-            // Filtra linhas vazias baseando-se nas colunas C e D
+            // Filtra linhas válidas da planilha (Coluna C e D preenchidas)
             dadosGerais = rawData.filter(i => i.Categoria && i.Contato);
             renderizar(dadosGerais);
             gerarFiltros(dadosGerais);
         } catch (e) {
-            document.getElementById('msg-vazio').innerText = "Nenhuma indicação cadastrada.";
+            document.getElementById('msg-vazio').innerText = "Nenhuma indicação disponível.";
         }
     }
 
@@ -118,17 +134,17 @@
     function renderizar(dados) {
         const lista = document.getElementById('lista');
         if(dados.length === 0) {
-            lista.innerHTML = '<div id="msg-vazio">Nenhum profissional encontrado.</div>';
+            lista.innerHTML = '<div id="msg-vazio">Nenhum profissional cadastrado.</div>';
             return;
         }
         lista.innerHTML = dados.map(item => `
             <div class="card">
                 <div>
                     <span class="tag">${item.Categoria}</span>
-                    <span class="nome-prof">${item.Contato}</span>
+                    <strong class="nome-prof">${item.Contato}</strong>
                 </div>
                 <a href="https://wa.me/55${item.Telefone.replace(/\D/g,'')}" class="btn-zap" target="_blank">
-                    📱 Chamar WhatsApp
+                    📱 WhatsApp
                 </a>
             </div>
         `).join('');
@@ -144,7 +160,7 @@
     document.getElementById('formIndicar').onsubmit = async (e) => {
         e.preventDefault();
         const btn = document.getElementById('btnEnviar');
-        btn.innerText = "Publicando...";
+        btn.innerText = "Enviando...";
         btn.disabled = true;
         
         const formData = new FormData(e.target);
@@ -162,10 +178,10 @@
                 mode: 'no-cors', 
                 body: JSON.stringify(objeto)
             });
-            alert("Sucesso! A indicação foi enviada.");
+            alert("Sucesso! Indicação enviada.");
             location.reload(); 
         } catch (err) {
-            alert("Erro na conexão. Tente novamente.");
+            alert("Erro ao enviar. Tente novamente.");
             btn.innerText = "Publicar Indicação";
             btn.disabled = false;
         }

@@ -6,31 +6,34 @@
     <title>Guia de Profissionais - Jd Maria Rosa</title>
     <style>
         :root { --azul: #004a99; --azul-claro: #eef2f7; --verde: #25d366; }
-        body { margin: 0; font-family: 'Segoe UI', Tahoma, sans-serif; background: #f4f7f9; color: #333; }
-        header { background: var(--azul); color: white; padding: 30px 20px; text-align: center; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
-        header h1 { margin: 0; font-size: 22px; text-transform: uppercase; }
+        body { margin: 0; font-family: 'Segoe UI', sans-serif; background: #f4f7f9; color: #333; }
+        header { background: var(--azul); color: white; padding: 25px; text-align: center; box-shadow: 0 2px 8px rgba(0,0,0,0.1); }
+        header h1 { margin: 0; font-size: 20px; text-transform: uppercase; letter-spacing: 1px; }
 
-        .sessao-cadastro { max-width: 450px; margin: -30px auto 20px; background: white; padding: 25px; border-radius: 15px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); position: relative; z-index: 5; }
-        .sessao-cadastro h2 { color: var(--azul); text-align: center; font-size: 16px; text-transform: uppercase; margin-bottom: 20px; border-bottom: 2px solid var(--azul-claro); padding-bottom: 10px; }
+        .sessao-cadastro { max-width: 450px; margin: 20px auto; background: white; padding: 25px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
+        .sessao-cadastro h2 { color: var(--azul); text-align: center; font-size: 16px; margin-top: 0; border-bottom: 2px solid var(--azul-claro); padding-bottom: 10px; text-transform: uppercase; }
         
         .campo { margin-bottom: 15px; }
-        .campo label { display: block; font-weight: bold; font-size: 12px; margin-bottom: 5px; color: #666; }
-        .campo input, .campo select { width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 8px; box-sizing: border-box; font-size: 14px; }
+        .campo label { display: block; font-weight: bold; font-size: 12px; margin-bottom: 5px; color: #555; }
+        .campo input, .campo select { width: 100%; padding: 12px; border: 1px solid #ccc; border-radius: 8px; box-sizing: border-box; font-size: 14px; }
+        .campo input:focus { border-color: var(--azul); outline: none; }
         
         .btn-publicar { width: 100%; background: var(--azul); color: white; border: none; padding: 15px; border-radius: 8px; font-weight: bold; cursor: pointer; text-transform: uppercase; transition: 0.3s; }
-        .btn-publicar:disabled { background: #ccc; }
+        .btn-publicar:hover { background: #003366; }
+        .btn-publicar:disabled { background: #ccc; cursor: not-allowed; }
 
-        .filtros { display: flex; overflow-x: auto; padding: 15px 20px; gap: 10px; background: white; border-bottom: 1px solid #eee; position: sticky; top: 0; z-index: 10; }
+        .filtros { display: flex; overflow-x: auto; padding: 15px; gap: 10px; background: white; border-bottom: 1px solid #ddd; position: sticky; top: 0; z-index: 10; }
         .filtros::-webkit-scrollbar { display: none; }
-        .btn-filtro { background: var(--azul-claro); border: none; padding: 10px 18px; border-radius: 25px; white-space: nowrap; cursor: pointer; color: var(--azul); font-weight: bold; font-size: 13px; }
+        .btn-filtro { background: var(--azul-claro); border: none; padding: 10px 20px; border-radius: 25px; white-space: nowrap; cursor: pointer; color: var(--azul); font-weight: bold; font-size: 13px; }
         .btn-filtro.ativo { background: var(--azul); color: white; }
 
-        .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 20px; padding: 25px; }
-        .card { background: white; border-radius: 12px; padding: 20px; box-shadow: 0 4px 6px rgba(0,0,0,0.05); border-top: 5px solid var(--azul); display: flex; flex-direction: column; justify-content: space-between; min-height: 150px; }
-        .tag { font-size: 10px; background: #f0f0f0; padding: 4px 8px; border-radius: 5px; font-weight: 800; text-transform: uppercase; color: #555; align-self: flex-start; }
-        .nome-prof { font-size: 20px; font-weight: bold; margin: 15px 0; color: #111; display: block; }
-        .btn-zap { display: flex; align-items: center; justify-content: center; gap: 10px; background: var(--verde); color: white; text-align: center; padding: 12px; border-radius: 8px; text-decoration: none; font-weight: bold; }
-        #msg-vazio { text-align: center; width: 100%; color: #999; padding: 40px; }
+        .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 15px; padding: 20px; }
+        .card { background: white; border-radius: 10px; padding: 20px; box-shadow: 0 2px 5px rgba(0,0,0,0.05); border-top: 5px solid var(--azul); display: flex; flex-direction: column; justify-content: space-between; }
+        .tag { font-size: 10px; background: #eee; padding: 4px 8px; border-radius: 4px; font-weight: bold; text-transform: uppercase; color: #666; align-self: flex-start; }
+        .nome-prof { font-size: 19px; font-weight: bold; margin: 12px 0; color: #111; }
+        .btn-zap { display: block; background: var(--verde); color: white; text-align: center; padding: 12px; border-radius: 8px; text-decoration: none; font-weight: bold; transition: 0.3s; }
+        .btn-zap:hover { opacity: 0.9; }
+        #msg-vazio { text-align: center; width: 100%; color: #999; padding: 30px; font-style: italic; }
     </style>
 </head>
 <body>
@@ -40,12 +43,18 @@
 </header>
 
 <div class="sessao-cadastro">
-    <h2>Indicar um Profissional</h2>
+    <h2>Nova Indicação</h2>
     <form id="formIndicar">
-        <div class="campo"><label>Seu Nome</label><input type="text" name="morador" required></div>
-        <div class="campo"><label>Seu Apartamento</label><input type="text" name="apartamento" required></div>
         <div class="campo">
-            <label>Categoria</label>
+            <label>Seu Nome (Obrigatório)</label>
+            <input type="text" name="morador" placeholder="Ex: João Silva" required>
+        </div>
+        <div class="campo">
+            <label>Seu Apartamento (Obrigatório)</label>
+            <input type="text" name="apartamento" placeholder="Ex: 102-A" required>
+        </div>
+        <div class="campo">
+            <label>Categoria (Obrigatório)</label>
             <select name="profissional" required>
                 <option value="">Selecione...</option>
                 <option value="Eletricista">Eletricista</option>
@@ -56,11 +65,18 @@
                 <option value="Pintor">Pintor</option>
                 <option value="Pedreiro">Pedreiro</option>
                 <option value="Marido de Aluguel">Marido de Aluguel</option>
+                <option value="Carreto">Carreto</option>
                 <option value="Outros">Outros</option>
             </select>
         </div>
-        <div class="campo"><label>Nome do Profissional (Contato)</label><input type="text" name="nomeProfissional" required></div>
-        <div class="campo"><label>Telefone/WhatsApp</label><input type="text" name="telefone" placeholder="DDD + Número" required></div>
+        <div class="campo">
+            <label>Nome do Profissional (Obrigatório)</label>
+            <input type="text" name="nomeProfissional" placeholder="Nome do indicado" required>
+        </div>
+        <div class="campo">
+            <label>WhatsApp (Obrigatório)</label>
+            <input type="text" name="telefone" placeholder="DDD + Número" required>
+        </div>
         <button type="submit" class="btn-publicar" id="btnEnviar">Publicar Indicação</button>
     </form>
 </div>
@@ -70,27 +86,23 @@
 </div>
 
 <div class="grid" id="lista">
-    <div id="msg-vazio">Carregando guia...</div>
+    <div id="msg-vazio">Carregando indicações...</div>
 </div>
 
 <script>
-    // URL ATUALIZADA DO SEU SCRIPT
-    const URL_SCRIPT = "https://script.google.com/macros/s/AKfycbz3r-SbmkbGMN8w2TGv64eVUrlGPooHamByuMgO-myv2q8q3Upb8NK3DafDAZkBlo66Mw/exec"; 
+    const URL_SCRIPT = "https://script.google.com/macros/s/AKfycbxMImEwtRNMkn0P3TEi89l-xnJnyz5ekEZALectmP_dlYIfVTL-5TT5OQkTCZrigHH_UQ/exec"; 
     let dadosGerais = [];
 
     async function buscarDados() {
         try {
             const res = await fetch(URL_SCRIPT);
             const rawData = await res.json();
-            
-            // Filtra linhas vazias e mapeia os nomes exatos das colunas da planilha
+            // Filtra linhas vazias baseando-se nas colunas C e D
             dadosGerais = rawData.filter(i => i.Categoria && i.Contato);
-            
             renderizar(dadosGerais);
             gerarFiltros(dadosGerais);
-        } catch (e) { 
-            console.error(e);
-            document.getElementById('msg-vazio').innerText = "Nenhuma indicação encontrada ainda.";
+        } catch (e) {
+            document.getElementById('msg-vazio').innerText = "Nenhuma indicação cadastrada.";
         }
     }
 
@@ -106,10 +118,9 @@
     function renderizar(dados) {
         const lista = document.getElementById('lista');
         if(dados.length === 0) {
-            lista.innerHTML = '<div id="msg-vazio">Nenhum profissional cadastrado.</div>';
+            lista.innerHTML = '<div id="msg-vazio">Nenhum profissional encontrado.</div>';
             return;
         }
-        
         lista.innerHTML = dados.map(item => `
             <div class="card">
                 <div>
@@ -117,7 +128,7 @@
                     <span class="nome-prof">${item.Contato}</span>
                 </div>
                 <a href="https://wa.me/55${item.Telefone.replace(/\D/g,'')}" class="btn-zap" target="_blank">
-                    📱 WhatsApp
+                    📱 Chamar WhatsApp
                 </a>
             </div>
         `).join('');
@@ -133,7 +144,7 @@
     document.getElementById('formIndicar').onsubmit = async (e) => {
         e.preventDefault();
         const btn = document.getElementById('btnEnviar');
-        btn.innerText = "Enviando...";
+        btn.innerText = "Publicando...";
         btn.disabled = true;
         
         const formData = new FormData(e.target);
@@ -151,10 +162,10 @@
                 mode: 'no-cors', 
                 body: JSON.stringify(objeto)
             });
-            alert("Obrigado! Indicação enviada com sucesso.");
+            alert("Sucesso! A indicação foi enviada.");
             location.reload(); 
         } catch (err) {
-            alert("Erro ao enviar. Tente novamente.");
+            alert("Erro na conexão. Tente novamente.");
             btn.innerText = "Publicar Indicação";
             btn.disabled = false;
         }

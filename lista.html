@@ -3,16 +3,18 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Guia de Profissionais - Jd Maria Rosa</title>
     <style>
         :root { --azul: #004a99; --azul-claro: #f0f4f8; --verde: #25d366; --borda: #e1e8ed; }
         body { margin: 0; font-family: 'Segoe UI', Tahoma, sans-serif; background: transparent; color: #333; }
         
         /* Container Principal */
-        .container-guia { background: white; border-radius: 8px; overflow: hidden; border: 1px solid var(--borda); margin-bottom: 20px; min-height: 400px; }
+        .container-guia { background: white; border-radius: 8px; overflow: hidden; border: 1px solid var(--borda); margin-bottom: 20px; min-height: 400px; box-shadow: 0 2px 10px rgba(0,0,0,0.05); }
 
         /* Cabeçalho de Ações */
         .acoes-topo { display: flex; justify-content: space-between; align-items: center; padding: 15px; background: #fff; border-bottom: 2px solid var(--azul-claro); }
-        .btn-toggle { background: var(--azul); color: white; border: none; padding: 10px 15px; border-radius: 6px; font-weight: bold; cursor: pointer; font-size: 13px; text-transform: uppercase; }
+        .btn-toggle { background: var(--azul); color: white; border: none; padding: 10px 15px; border-radius: 6px; font-weight: bold; cursor: pointer; font-size: 13px; text-transform: uppercase; transition: 0.3s; }
+        .btn-toggle:hover { background: #003366; }
         .btn-toggle.voltar { background: #666; }
 
         /* Filtros */
@@ -22,23 +24,28 @@
         .btn-filtro.ativo { background: var(--azul); color: white; border-color: var(--azul); }
 
         /* Lista de Profissionais */
-        .linha-profissional { display: flex; align-items: center; justify-content: space-between; padding: 12px 15px; border-bottom: 1px solid var(--borda); }
+        .linha-profissional { display: flex; align-items: center; justify-content: space-between; padding: 12px 15px; border-bottom: 1px solid var(--borda); transition: background 0.2s; }
         .linha-profissional:last-child { border-bottom: none; }
+        .linha-profissional:hover { background: #f9fbff; }
+        
         .info { display: flex; align-items: center; gap: 20px; flex: 1; }
         .cat-texto { font-size: 15px; font-weight: 800; color: var(--azul); min-width: 150px; text-transform: uppercase; }
-        .nome-texto { font-size: 14px; font-weight: 600; color: #555; }
-        .btn-zap-link { background: var(--verde); color: white; text-decoration: none; padding: 8px 14px; border-radius: 6px; font-size: 13px; font-weight: bold; display: flex; align-items: center; gap: 6px; }
+        .nome-texto { font-size: 14px; font-weight: 600; color: #444; }
 
-        /* Formulário de Cadastro (Escondido por padrão) */
+        .btn-zap-link { background: var(--verde); color: white; text-decoration: none; padding: 8px 14px; border-radius: 6px; font-size: 13px; font-weight: bold; display: flex; align-items: center; gap: 6px; }
+        .btn-zap-link:hover { background: #1ebe57; }
+
+        /* Formulário de Cadastro */
         #sessao-cadastro { display: none; padding: 25px; max-width: 500px; margin: 0 auto; }
         .campo { margin-bottom: 15px; }
         .campo label { display: block; font-weight: bold; font-size: 12px; margin-bottom: 5px; color: #444; }
         .campo input, .campo select { width: 100%; padding: 12px; border: 1px solid #ccc; border-radius: 8px; box-sizing: border-box; font-size: 14px; }
-        .info-controle { font-size: 10px; color: #cc0000; display: block; margin-top: 2px; }
-        .btn-enviar { width: 100%; background: var(--verde); color: white; border: none; padding: 15px; border-radius: 8px; font-weight: bold; cursor: pointer; text-transform: uppercase; margin-top: 10px; }
+        .info-controle { font-size: 10px; color: #cc0000; font-weight: normal; }
+        .btn-enviar { width: 100%; background: var(--verde); color: white; border: none; padding: 15px; border-radius: 8px; font-weight: bold; cursor: pointer; text-transform: uppercase; margin-top: 10px; font-size: 14px; }
 
         /* Banner Final */
-        .banner-final { width: 100%; max-width: 800px; margin: 20px auto; display: block; border-radius: 8px; cursor: pointer; }
+        .banner-final { width: 100%; max-width: 800px; margin: 20px auto; display: block; border-radius: 8px; cursor: pointer; transition: 0.3s; }
+        .banner-final:hover { opacity: 0.9; transform: scale(1.01); }
 
         #msg-vazio { text-align: center; color: #999; padding: 30px; font-style: italic; font-size: 13px; }
 
@@ -69,60 +76,61 @@
     </div>
 
     <div id="sessao-cadastro">
-        <form id="formIndicar">
-            <div class="campo">
-                <label>Seu Nome <span class="info-controle">(Apenas para controle interno)</span></label>
-                <input type="text" name="morador" placeholder="Seu nome" required>
-            </div>
-            <div class="campo">
-                <label>Seu Apartamento <span class="info-controle">(Apenas para controle interno)</span></label>
-                <input type="text" name="apartamento" placeholder="Ex: 102-A" required>
-            </div>
-            <div class="campo">
-                <label>Categoria do Profissional</label>
-                <select name="profissional" required>
-                    <option value="">Selecione...</option>
-                    <option value="Azulejista">Azulejista</option>
-                    <option value="Carpinteiro">Carpinteiro</option>
-                    <option value="Chaveiro">Chaveiro</option>
-                    <option value="Costureira">Costureira</option>
-                    <option value="Eletricista">Eletricista</option>
-                    <option value="Encanador / Bombeiro">Encanador / Bombeiro</option>
-                    <option value="Faxineira">Faxineira</option>
-                    <option value="Gesseiro">Gesseiro</option>
-                    <option value="Marceneiro">Marceneiro</option>
-                    <option value="Marido de Aluguel">Marido de Aluguel</option>
-                    <option value="Pedreiro">Pedreiro</option>
-                    <option value="Pintor">Pintor</option>
-                    <option value="Serralheiro">Serralheiro</option>
-                    <option value="Técnico em Ar-condicionado">Técnico em Ar-condicionado</option>
-                    <option value="Técnico em Eletrodomésticos">Técnico em Eletrodomésticos</option>
-                    <option value="Técnico em Geladeira">Técnico em Geladeira</option>
-                    <option value="Técnico em Máquina de Lavar">Técnico em Máquina de Lavar</option>
-                    <option value="Vidraceiro">Vidraceiro</option>
-                </select>
-            </div>
-            <div class="campo">
-                <label>Nome do Profissional</label>
-                <input type="text" name="nomeProfissional" placeholder="Nome do indicado" required>
-            </div>
-            <div class="campo">
-                <label>WhatsApp (DDD + Número)</label>
-                <input type="text" name="telefone" id="inputTel" placeholder="Ex: 11988887777" required maxlength="11">
-            </div>
-            <button type="submit" class="btn-enviar" id="btnEnviar">Publicar Indicação</button>
-        </form>
+        <div id="conteudo-form">
+            <form id="formIndicar">
+                <div class="campo">
+                    <label>Seu Nome <span class="info-controle">(Somente controle interno)</span></label>
+                    <input type="text" name="morador" placeholder="Seu nome" required>
+                </div>
+                <div class="campo">
+                    <label>Seu Apartamento <span class="info-controle">(Somente controle interno)</span></label>
+                    <input type="text" name="apartamento" placeholder="Ex: 102-A" required>
+                </div>
+                <div class="campo">
+                    <label>Categoria do Profissional</label>
+                    <select name="profissional" required>
+                        <option value="">Selecione...</option>
+                        <option value="Azulejista">Azulejista</option>
+                        <option value="Carpinteiro">Carpinteiro</option>
+                        <option value="Chaveiro">Chaveiro</option>
+                        <option value="Costureira">Costureira</option>
+                        <option value="Eletricista">Eletricista</option>
+                        <option value="Encanador / Bombeiro">Encanador / Bombeiro</option>
+                        <option value="Faxineira">Faxineira</option>
+                        <option value="Gesseiro">Gesseiro</option>
+                        <option value="Marceneiro">Marceneiro</option>
+                        <option value="Marido de Aluguel">Marido de Aluguel</option>
+                        <option value="Pedreiro">Pedreiro</option>
+                        <option value="Pintor">Pintor</option>
+                        <option value="Serralheiro">Serralheiro</option>
+                        <option value="Técnico em Ar-condicionado">Técnico em Ar-condicionado</option>
+                        <option value="Técnico em Eletrodomésticos">Técnico em Eletrodomésticos</option>
+                        <option value="Técnico em Geladeira">Técnico em Geladeira</option>
+                        <option value="Técnico em Máquina de Lavar">Técnico em Máquina de Lavar</option>
+                        <option value="Vidraceiro">Vidraceiro</option>
+                    </select>
+                </div>
+                <div class="campo">
+                    <label>Nome do Profissional</label>
+                    <input type="text" name="nomeProfissional" placeholder="Nome do indicado" required>
+                </div>
+                <div class="campo">
+                    <label>WhatsApp (DDD + Número)</label>
+                    <input type="text" name="telefone" id="inputTel" placeholder="Ex: 11988887777" required maxlength="11">
+                </div>
+                <button type="submit" class="btn-enviar" id="btnEnviar">Publicar Indicação</button>
+            </form>
+        </div>
     </div>
 </div>
 
-<img src="indique.png" alt="Indique" class="banner-final" onclick="alternarTela()">
+<img src="indique.png" alt="Indique" class="banner-final" onclick="if(telaAtual==='lista')alternarTela()">
 
 <script>
     const URL_SCRIPT = "https://script.google.com/macros/s/AKfycbz3r-SbmkbGMN8w2TGv64eVUrlGPooHamByuMgO-myv2q8q3Upb8NK3DafDAZkBlo66Mw/exec"; 
     let dadosGerais = [];
     let telaAtual = "lista";
 
-    // --- FUNÇÕES DE NAVEGAÇÃO ---
     function alternarTela() {
         const telaLista = document.getElementById('tela-lista');
         const telaForm = document.getElementById('sessao-cadastro');
@@ -146,7 +154,6 @@
         }
     }
 
-    // --- LÓGICA DA LISTA ---
     async function buscarDados() {
         try {
             const res = await fetch(URL_SCRIPT);
@@ -162,7 +169,7 @@
 
     function renderizar(dados) {
         const corpo = document.getElementById('lista-corpo');
-        if(dados.length === 0) { corpo.innerHTML = '<div id="msg-vazio">Nenhum profissional.</div>'; return; }
+        if(dados.length === 0) { corpo.innerHTML = '<div id="msg-vazio">Nenhum profissional cadastrado.</div>'; return; }
         corpo.innerHTML = dados.map(item => `
             <div class="linha-profissional">
                 <div class="info">
@@ -187,13 +194,13 @@
         cats.forEach(c => btnF.innerHTML += `<button class="btn-filtro" onclick="filtrar('${c}', this)">${c}</button>`);
     }
 
-    // --- LÓGICA DO FORMULÁRIO ---
     document.getElementById('inputTel').addEventListener('input', function(e) { this.value = this.value.replace(/\D/g, ''); });
 
     document.getElementById('formIndicar').onsubmit = async (e) => {
         e.preventDefault();
         const btn = document.getElementById('btnEnviar');
-        btn.innerText = "Enviando..."; btn.disabled = true;
+        btn.innerText = "Enviando..."; 
+        btn.disabled = true;
         
         const formData = new FormData(e.target);
         const objeto = {
@@ -206,12 +213,20 @@
         
         try {
             await fetch(URL_SCRIPT, { method: 'POST', mode: 'no-cors', body: JSON.stringify(objeto) });
-            alert("Obrigado! Sua indicação foi enviada.");
-            e.target.reset();
-            location.reload(); // Recarrega o Iframe para mostrar o novo contato na lista
+            
+            // MENSAGEM DE SUCESSO SEM O ENDEREÇO DO GITHUB
+            document.getElementById('conteudo-form').innerHTML = `
+                <div style="text-align: center; padding: 40px 10px;">
+                    <div style="font-size: 50px; margin-bottom: 15px;">✅</div>
+                    <h2 style="color: var(--azul); margin: 0 0 10px 0;">Obrigada!</h2>
+                    <p style="color: #666; font-size: 15px; margin: 0;">Sua indicação foi enviada com sucesso.</p>
+                    <button onclick="location.reload()" class="btn-enviar" style="background: var(--azul); max-width: 220px; margin: 25px auto 0 auto;">VOLTAR PARA A LISTA</button>
+                </div>
+            `;
         } catch (err) {
-            alert("Erro ao enviar.");
-            btn.innerText = "Publicar Indicação"; btn.disabled = false;
+            alert("Erro ao enviar. Tente novamente.");
+            btn.innerText = "Publicar Indicação"; 
+            btn.disabled = false;
         }
     };
 

@@ -7,9 +7,9 @@
         :root { --azul: #004a99; --azul-claro: #f0f4f8; --verde: #25d366; --borda: #e1e8ed; }
         body { margin: 0; font-family: 'Segoe UI', Tahoma, sans-serif; background: transparent; color: #333; }
         
-        .container-lista { background: white; border-radius: 8px; overflow: hidden; border: 1px solid var(--borda); }
+        .container-lista { background: white; border-radius: 8px; overflow: hidden; border: 1px solid var(--borda); margin-bottom: 20px; }
 
-        /* Filtros */
+        /* Filtros horizontais */
         .filtros { display: flex; overflow-x: auto; padding: 12px; gap: 8px; background: #fff; border-bottom: 1px solid var(--borda); scrollbar-width: none; }
         .filtros::-webkit-scrollbar { display: none; }
         .btn-filtro { background: var(--azul-claro); border: none; padding: 7px 14px; border-radius: 15px; white-space: nowrap; cursor: pointer; color: var(--azul); font-weight: bold; font-size: 11px; text-transform: uppercase; }
@@ -25,30 +25,40 @@
         }
         .linha-profissional:last-child { border-bottom: none; }
         
-        .info { display: flex; align-items: center; gap: 15px; flex: 1; }
-        .cat-texto { font-size: 15px; font-weight: 800; color: var(--azul); min-width: 130px; text-transform: uppercase; }
-        .nome-texto { font-size: 14px; font-weight: 600; color: #444; }
+        .info { display: flex; align-items: center; gap: 20px; flex: 1; }
+        .cat-texto { font-size: 15px; font-weight: 800; color: var(--azul); min-width: 150px; text-transform: uppercase; }
+        .nome-texto { font-size: 14px; font-weight: 600; color: #555; }
 
         .btn-zap-link { 
             background: var(--verde); 
             color: white; 
             text-decoration: none; 
-            padding: 6px 12px; 
+            padding: 8px 14px; 
             border-radius: 6px; 
             font-size: 13px; 
             font-weight: bold; 
             display: flex; 
             align-items: center; 
-            gap: 5px; 
+            gap: 6px; 
+        }
+
+        /* Banner Final Responsivo */
+        .banner-final {
+            width: 100%;
+            max-width: 800px; /* Tamanho máximo para não estourar em telas grandes */
+            margin: 20px auto;
+            display: block;
+            border-radius: 8px;
         }
 
         #msg-vazio { text-align: center; color: #999; padding: 30px; font-style: italic; font-size: 13px; }
 
-        @media (max-width: 500px) {
+        @media (max-width: 600px) {
             .info { flex-direction: column; align-items: flex-start; gap: 2px; }
-            .cat-texto { font-size: 12px; min-width: auto; }
-            .nome-texto { font-size: 13px; }
+            .cat-texto { font-size: 11px; min-width: auto; }
+            .nome-texto { font-size: 13px; margin-bottom: 4px; }
             .btn-zap-link span { display: none; }
+            .banner-final { width: 95%; } /* Margem nas laterais no celular */
         }
     </style>
 </head>
@@ -63,6 +73,8 @@
     </div>
 </div>
 
+<img src="indique.png" alt="Não encontrou a categoria? Sugira no grupo!" class="banner-final">
+
 <script>
     const URL_SCRIPT = "https://script.google.com/macros/s/AKfycbz3r-SbmkbGMN8w2TGv64eVUrlGPooHamByuMgO-myv2q8q3Upb8NK3DafDAZkBlo66Mw/exec"; 
     let dadosGerais = [];
@@ -72,9 +84,6 @@
             const res = await fetch(URL_SCRIPT);
             const rawData = await res.json();
             
-            // FILTRO E ORDENAÇÃO:
-            // 1. Remove linhas vazias
-            // 2. Ordena de A-Z pela Categoria
             dadosGerais = rawData
                 .filter(i => i.Categoria && i.Contato)
                 .sort((a, b) => a.Categoria.localeCompare(b.Categoria));

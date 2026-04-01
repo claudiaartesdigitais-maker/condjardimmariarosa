@@ -7,49 +7,38 @@
         :root { --azul: #004a99; --azul-claro: #f0f4f8; --verde: #25d366; --borda: #e1e8ed; }
         body { margin: 0; font-family: 'Segoe UI', Tahoma, sans-serif; background: transparent; color: #333; }
         
-        .container-lista { background: white; border-radius: 8px; overflow: hidden; border: 1px solid var(--borda); margin-bottom: 20px; }
+        /* Container Principal */
+        .container-guia { background: white; border-radius: 8px; overflow: hidden; border: 1px solid var(--borda); margin-bottom: 20px; min-height: 400px; }
 
-        /* Filtros horizontais */
-        .filtros { display: flex; overflow-x: auto; padding: 12px; gap: 8px; background: #fff; border-bottom: 1px solid var(--borda); scrollbar-width: none; }
+        /* Cabeçalho de Ações */
+        .acoes-topo { display: flex; justify-content: space-between; align-items: center; padding: 15px; background: #fff; border-bottom: 2px solid var(--azul-claro); }
+        .btn-toggle { background: var(--azul); color: white; border: none; padding: 10px 15px; border-radius: 6px; font-weight: bold; cursor: pointer; font-size: 13px; text-transform: uppercase; }
+        .btn-toggle.voltar { background: #666; }
+
+        /* Filtros */
+        .filtros { display: flex; overflow-x: auto; padding: 12px; gap: 8px; background: #fafafa; border-bottom: 1px solid var(--borda); scrollbar-width: none; }
         .filtros::-webkit-scrollbar { display: none; }
-        .btn-filtro { background: var(--azul-claro); border: none; padding: 7px 14px; border-radius: 15px; white-space: nowrap; cursor: pointer; color: var(--azul); font-weight: bold; font-size: 11px; text-transform: uppercase; }
-        .btn-filtro.ativo { background: var(--azul); color: white; }
+        .btn-filtro { background: #fff; border: 1px solid var(--borda); padding: 7px 14px; border-radius: 15px; white-space: nowrap; cursor: pointer; color: var(--azul); font-weight: bold; font-size: 11px; text-transform: uppercase; }
+        .btn-filtro.ativo { background: var(--azul); color: white; border-color: var(--azul); }
 
-        /* Linha do Profissional */
-        .linha-profissional { 
-            display: flex; 
-            align-items: center; 
-            justify-content: space-between; 
-            padding: 12px 15px; 
-            border-bottom: 1px solid var(--borda);
-        }
+        /* Lista de Profissionais */
+        .linha-profissional { display: flex; align-items: center; justify-content: space-between; padding: 12px 15px; border-bottom: 1px solid var(--borda); }
         .linha-profissional:last-child { border-bottom: none; }
-        
         .info { display: flex; align-items: center; gap: 20px; flex: 1; }
         .cat-texto { font-size: 15px; font-weight: 800; color: var(--azul); min-width: 150px; text-transform: uppercase; }
         .nome-texto { font-size: 14px; font-weight: 600; color: #555; }
+        .btn-zap-link { background: var(--verde); color: white; text-decoration: none; padding: 8px 14px; border-radius: 6px; font-size: 13px; font-weight: bold; display: flex; align-items: center; gap: 6px; }
 
-        .btn-zap-link { 
-            background: var(--verde); 
-            color: white; 
-            text-decoration: none; 
-            padding: 8px 14px; 
-            border-radius: 6px; 
-            font-size: 13px; 
-            font-weight: bold; 
-            display: flex; 
-            align-items: center; 
-            gap: 6px; 
-        }
+        /* Formulário de Cadastro (Escondido por padrão) */
+        #sessao-cadastro { display: none; padding: 25px; max-width: 500px; margin: 0 auto; }
+        .campo { margin-bottom: 15px; }
+        .campo label { display: block; font-weight: bold; font-size: 12px; margin-bottom: 5px; color: #444; }
+        .campo input, .campo select { width: 100%; padding: 12px; border: 1px solid #ccc; border-radius: 8px; box-sizing: border-box; font-size: 14px; }
+        .info-controle { font-size: 10px; color: #cc0000; display: block; margin-top: 2px; }
+        .btn-enviar { width: 100%; background: var(--verde); color: white; border: none; padding: 15px; border-radius: 8px; font-weight: bold; cursor: pointer; text-transform: uppercase; margin-top: 10px; }
 
-        /* Banner Final Responsivo */
-        .banner-final {
-            width: 100%;
-            max-width: 800px; /* Tamanho máximo para não estourar em telas grandes */
-            margin: 20px auto;
-            display: block;
-            border-radius: 8px;
-        }
+        /* Banner Final */
+        .banner-final { width: 100%; max-width: 800px; margin: 20px auto; display: block; border-radius: 8px; cursor: pointer; }
 
         #msg-vazio { text-align: center; color: #999; padding: 30px; font-style: italic; font-size: 13px; }
 
@@ -58,67 +47,129 @@
             .cat-texto { font-size: 11px; min-width: auto; }
             .nome-texto { font-size: 13px; margin-bottom: 4px; }
             .btn-zap-link span { display: none; }
-            .banner-final { width: 95%; } /* Margem nas laterais no celular */
+            .banner-final { width: 95%; }
         }
     </style>
 </head>
 <body>
 
-<div class="container-lista">
-    <div class="filtros" id="botoesFiltros">
-        <button class="btn-filtro ativo" onclick="filtrar('Todos', this)">Todos</button>
+<div class="container-guia">
+    <div class="acoes-topo">
+        <strong id="titulo-pagina" style="color: var(--azul)">LISTA DE CONTATOS</strong>
+        <button id="btnTrocar" class="btn-toggle" onclick="alternarTela()">➕ INDICAR NOVO</button>
     </div>
-    <div id="lista-corpo">
-        <div id="msg-vazio">Buscando profissionais...</div>
+
+    <div id="tela-lista">
+        <div class="filtros" id="botoesFiltros">
+            <button class="btn-filtro ativo" onclick="filtrar('Todos', this)">Todos</button>
+        </div>
+        <div id="lista-corpo">
+            <div id="msg-vazio">Buscando profissionais...</div>
+        </div>
+    </div>
+
+    <div id="sessao-cadastro">
+        <form id="formIndicar">
+            <div class="campo">
+                <label>Seu Nome <span class="info-controle">(Apenas para controle interno)</span></label>
+                <input type="text" name="morador" placeholder="Seu nome" required>
+            </div>
+            <div class="campo">
+                <label>Seu Apartamento <span class="info-controle">(Apenas para controle interno)</span></label>
+                <input type="text" name="apartamento" placeholder="Ex: 102-A" required>
+            </div>
+            <div class="campo">
+                <label>Categoria do Profissional</label>
+                <select name="profissional" required>
+                    <option value="">Selecione...</option>
+                    <option value="Azulejista">Azulejista</option>
+                    <option value="Carpinteiro">Carpinteiro</option>
+                    <option value="Chaveiro">Chaveiro</option>
+                    <option value="Costureira">Costureira</option>
+                    <option value="Eletricista">Eletricista</option>
+                    <option value="Encanador / Bombeiro">Encanador / Bombeiro</option>
+                    <option value="Faxineira">Faxineira</option>
+                    <option value="Gesseiro">Gesseiro</option>
+                    <option value="Marceneiro">Marceneiro</option>
+                    <option value="Marido de Aluguel">Marido de Aluguel</option>
+                    <option value="Pedreiro">Pedreiro</option>
+                    <option value="Pintor">Pintor</option>
+                    <option value="Serralheiro">Serralheiro</option>
+                    <option value="Técnico em Ar-condicionado">Técnico em Ar-condicionado</option>
+                    <option value="Técnico em Eletrodomésticos">Técnico em Eletrodomésticos</option>
+                    <option value="Técnico em Geladeira">Técnico em Geladeira</option>
+                    <option value="Técnico em Máquina de Lavar">Técnico em Máquina de Lavar</option>
+                    <option value="Vidraceiro">Vidraceiro</option>
+                </select>
+            </div>
+            <div class="campo">
+                <label>Nome do Profissional</label>
+                <input type="text" name="nomeProfissional" placeholder="Nome do indicado" required>
+            </div>
+            <div class="campo">
+                <label>WhatsApp (DDD + Número)</label>
+                <input type="text" name="telefone" id="inputTel" placeholder="Ex: 11988887777" required maxlength="11">
+            </div>
+            <button type="submit" class="btn-enviar" id="btnEnviar">Publicar Indicação</button>
+        </form>
     </div>
 </div>
 
-<img src="indique.png" alt="Não encontrou a categoria? Sugira no grupo!" class="banner-final">
+<img src="indique.png" alt="Indique" class="banner-final" onclick="alternarTela()">
 
 <script>
     const URL_SCRIPT = "https://script.google.com/macros/s/AKfycbz3r-SbmkbGMN8w2TGv64eVUrlGPooHamByuMgO-myv2q8q3Upb8NK3DafDAZkBlo66Mw/exec"; 
     let dadosGerais = [];
+    let telaAtual = "lista";
 
+    // --- FUNÇÕES DE NAVEGAÇÃO ---
+    function alternarTela() {
+        const telaLista = document.getElementById('tela-lista');
+        const telaForm = document.getElementById('sessao-cadastro');
+        const btn = document.getElementById('btnTrocar');
+        const titulo = document.getElementById('titulo-pagina');
+
+        if (telaAtual === "lista") {
+            telaLista.style.display = "none";
+            telaForm.style.display = "block";
+            btn.innerText = "⬅ VOLTAR";
+            btn.classList.add('voltar');
+            titulo.innerText = "NOVA INDICAÇÃO";
+            telaAtual = "cadastro";
+        } else {
+            telaLista.style.display = "block";
+            telaForm.style.display = "none";
+            btn.innerText = "➕ INDICAR NOVO";
+            btn.classList.remove('voltar');
+            titulo.innerText = "LISTA DE CONTATOS";
+            telaAtual = "lista";
+        }
+    }
+
+    // --- LÓGICA DA LISTA ---
     async function buscarDados() {
         try {
             const res = await fetch(URL_SCRIPT);
             const rawData = await res.json();
-            
-            dadosGerais = rawData
-                .filter(i => i.Categoria && i.Contato)
+            dadosGerais = rawData.filter(i => i.Categoria && i.Contato)
                 .sort((a, b) => a.Categoria.localeCompare(b.Categoria));
-
             renderizar(dadosGerais);
             gerarFiltros(dadosGerais);
         } catch (e) {
-            document.getElementById('msg-vazio').innerText = "Erro ao carregar dados.";
+            document.getElementById('msg-vazio').innerText = "Erro ao carregar lista.";
         }
-    }
-
-    function gerarFiltros(dados) {
-        const cats = [...new Set(dados.map(i => i.Categoria))].sort();
-        const btnF = document.getElementById('botoesFiltros');
-        btnF.innerHTML = '<button class="btn-filtro ativo" onclick="filtrar(\'Todos\', this)">Todos</button>';
-        cats.forEach(c => {
-            btnF.innerHTML += `<button class="btn-filtro" onclick="filtrar('${c}', this)">${c}</button>`;
-        });
     }
 
     function renderizar(dados) {
         const corpo = document.getElementById('lista-corpo');
-        if(dados.length === 0) {
-            corpo.innerHTML = '<div id="msg-vazio">Nenhum profissional cadastrado.</div>';
-            return;
-        }
+        if(dados.length === 0) { corpo.innerHTML = '<div id="msg-vazio">Nenhum profissional.</div>'; return; }
         corpo.innerHTML = dados.map(item => `
             <div class="linha-profissional">
                 <div class="info">
                     <span class="cat-texto">${item.Categoria}</span>
                     <span class="nome-texto">${item.Contato}</span>
                 </div>
-                <a href="https://wa.me/55${item.Telefone.replace(/\D/g,'')}" class="btn-zap-link" target="_blank">
-                    📱 <span>WhatsApp</span>
-                </a>
+                <a href="https://wa.me/55${item.Telefone.replace(/\D/g,'')}" class="btn-zap-link" target="_blank">📱 <span>WhatsApp</span></a>
             </div>
         `).join('');
     }
@@ -126,9 +177,43 @@
     function filtrar(cat, elemento) {
         document.querySelectorAll('.btn-filtro').forEach(b => b.classList.remove('ativo'));
         elemento.classList.add('ativo');
-        if(cat === 'Todos') renderizar(dadosGerais);
-        else renderizar(dadosGerais.filter(i => i.Categoria === cat));
+        renderizar(cat === 'Todos' ? dadosGerais : dadosGerais.filter(i => i.Categoria === cat));
     }
+
+    function gerarFiltros(dados) {
+        const cats = [...new Set(dados.map(i => i.Categoria))].sort();
+        const btnF = document.getElementById('botoesFiltros');
+        btnF.innerHTML = '<button class="btn-filtro ativo" onclick="filtrar(\'Todos\', this)">Todos</button>';
+        cats.forEach(c => btnF.innerHTML += `<button class="btn-filtro" onclick="filtrar('${c}', this)">${c}</button>`);
+    }
+
+    // --- LÓGICA DO FORMULÁRIO ---
+    document.getElementById('inputTel').addEventListener('input', function(e) { this.value = this.value.replace(/\D/g, ''); });
+
+    document.getElementById('formIndicar').onsubmit = async (e) => {
+        e.preventDefault();
+        const btn = document.getElementById('btnEnviar');
+        btn.innerText = "Enviando..."; btn.disabled = true;
+        
+        const formData = new FormData(e.target);
+        const objeto = {
+            morador: formData.get('morador'),
+            apartamento: formData.get('apartamento'),
+            profissional: formData.get('profissional'),
+            nomeProfissional: formData.get('nomeProfissional'),
+            telefone: formData.get('telefone')
+        };
+        
+        try {
+            await fetch(URL_SCRIPT, { method: 'POST', mode: 'no-cors', body: JSON.stringify(objeto) });
+            alert("Obrigado! Sua indicação foi enviada.");
+            e.target.reset();
+            location.reload(); // Recarrega o Iframe para mostrar o novo contato na lista
+        } catch (err) {
+            alert("Erro ao enviar.");
+            btn.innerText = "Publicar Indicação"; btn.disabled = false;
+        }
+    };
 
     buscarDados();
 </script>

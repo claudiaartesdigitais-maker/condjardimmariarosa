@@ -7,48 +7,30 @@
     <style>
         :root { --azul: #004a99; --azul-claro: #f0f4f8; --verde: #25d366; --borda: #e1e8ed; }
         body { margin: 0; font-family: 'Segoe UI', Tahoma, sans-serif; background: transparent; color: #333; }
-        
-        /* Container Principal */
         .container-guia { background: white; border-radius: 8px; overflow: hidden; border: 1px solid var(--borda); margin-bottom: 20px; min-height: 400px; box-shadow: 0 2px 10px rgba(0,0,0,0.05); }
-
-        /* Cabeçalho de Ações */
         .acoes-topo { display: flex; justify-content: space-between; align-items: center; padding: 15px; background: #fff; border-bottom: 2px solid var(--azul-claro); }
         .btn-toggle { background: var(--azul); color: white; border: none; padding: 10px 15px; border-radius: 6px; font-weight: bold; cursor: pointer; font-size: 13px; text-transform: uppercase; transition: 0.3s; }
         .btn-toggle:hover { background: #003366; }
         .btn-toggle.voltar { background: #666; }
-
-        /* Filtros */
         .filtros { display: flex; overflow-x: auto; padding: 12px; gap: 8px; background: #fafafa; border-bottom: 1px solid var(--borda); scrollbar-width: none; }
         .filtros::-webkit-scrollbar { display: none; }
         .btn-filtro { background: #fff; border: 1px solid var(--borda); padding: 7px 14px; border-radius: 15px; white-space: nowrap; cursor: pointer; color: var(--azul); font-weight: bold; font-size: 11px; text-transform: uppercase; }
         .btn-filtro.ativo { background: var(--azul); color: white; border-color: var(--azul); }
-
-        /* Lista de Profissionais */
         .linha-profissional { display: flex; align-items: center; justify-content: space-between; padding: 12px 15px; border-bottom: 1px solid var(--borda); transition: background 0.2s; }
         .linha-profissional:last-child { border-bottom: none; }
         .linha-profissional:hover { background: #f9fbff; }
-        
         .info { display: flex; align-items: center; gap: 20px; flex: 1; }
         .cat-texto { font-size: 15px; font-weight: 800; color: var(--azul); min-width: 150px; text-transform: uppercase; }
         .nome-texto { font-size: 14px; font-weight: 600; color: #444; }
-
         .btn-zap-link { background: var(--verde); color: white; text-decoration: none; padding: 8px 14px; border-radius: 6px; font-size: 13px; font-weight: bold; display: flex; align-items: center; gap: 6px; }
-        .btn-zap-link:hover { background: #1ebe57; }
-
-        /* Formulário de Cadastro */
         #sessao-cadastro { display: none; padding: 25px; max-width: 500px; margin: 0 auto; }
         .campo { margin-bottom: 15px; }
         .campo label { display: block; font-weight: bold; font-size: 12px; margin-bottom: 5px; color: #444; }
         .campo input, .campo select { width: 100%; padding: 12px; border: 1px solid #ccc; border-radius: 8px; box-sizing: border-box; font-size: 14px; }
         .info-controle { font-size: 10px; color: #cc0000; font-weight: normal; }
         .btn-enviar { width: 100%; background: var(--verde); color: white; border: none; padding: 15px; border-radius: 8px; font-weight: bold; cursor: pointer; text-transform: uppercase; margin-top: 10px; font-size: 14px; }
-
-        /* Banner Final */
         .banner-final { width: 100%; max-width: 800px; margin: 20px auto; display: block; border-radius: 8px; cursor: pointer; transition: 0.3s; }
-        .banner-final:hover { opacity: 0.9; transform: scale(1.01); }
-
         #msg-vazio { text-align: center; color: #999; padding: 30px; font-style: italic; font-size: 13px; }
-
         @media (max-width: 600px) {
             .info { flex-direction: column; align-items: flex-start; gap: 2px; }
             .cat-texto { font-size: 11px; min-width: auto; }
@@ -59,22 +41,17 @@
     </style>
 </head>
 <body>
-
 <div class="container-guia">
     <div class="acoes-topo">
         <strong id="titulo-pagina" style="color: var(--azul)">LISTA DE CONTATOS</strong>
         <button id="btnTrocar" class="btn-toggle" onclick="alternarTela()">➕ INDICAR NOVO</button>
     </div>
-
     <div id="tela-lista">
         <div class="filtros" id="botoesFiltros">
             <button class="btn-filtro ativo" onclick="filtrar('Todos', this)">Todos</button>
         </div>
-        <div id="lista-corpo">
-            <div id="msg-vazio">Buscando profissionais...</div>
-        </div>
+        <div id="lista-corpo"><div id="msg-vazio">Buscando profissionais...</div></div>
     </div>
-
     <div id="sessao-cadastro">
         <div id="conteudo-form">
             <form id="formIndicar">
@@ -107,6 +84,7 @@
                         <option value="Técnico em Eletrodomésticos">Técnico em Eletrodomésticos</option>
                         <option value="Técnico em Geladeira">Técnico em Geladeira</option>
                         <option value="Técnico em Máquina de Lavar">Técnico em Máquina de Lavar</option>
+                        <option value="Uber">Uber</option>
                         <option value="Vidraceiro">Vidraceiro</option>
                     </select>
                 </div>
@@ -123,11 +101,9 @@
         </div>
     </div>
 </div>
-
 <img src="indique.png" alt="Indique" class="banner-final" onclick="if(telaAtual==='lista')alternarTela()">
-
 <script>
-    const URL_SCRIPT = "https://script.google.com/macros/s/AKfycbz3r-SbmkbGMN8w2TGv64eVUrlGPooHamByuMgO-myv2q8q3Upb8NK3DafDAZkBlo66Mw/exec"; 
+    const URL_SCRIPT = "https://script.google.com/macros/s/AKfycbwIiiSuQ5vnRbJfh01F1t8XkYvmNXfPaSyH9eZTN4zECcQ_JfYAHdyy2FAR9yqJxhto/exec"; 
     let dadosGerais = [];
     let telaAtual = "lista";
 
@@ -136,21 +112,14 @@
         const telaForm = document.getElementById('sessao-cadastro');
         const btn = document.getElementById('btnTrocar');
         const titulo = document.getElementById('titulo-pagina');
-
         if (telaAtual === "lista") {
-            telaLista.style.display = "none";
-            telaForm.style.display = "block";
-            btn.innerText = "⬅ VOLTAR";
-            btn.classList.add('voltar');
-            titulo.innerText = "NOVA INDICAÇÃO";
-            telaAtual = "cadastro";
+            telaLista.style.display = "none"; telaForm.style.display = "block";
+            btn.innerText = "⬅ VOLTAR"; btn.classList.add('voltar');
+            titulo.innerText = "NOVA INDICAÇÃO"; telaAtual = "cadastro";
         } else {
-            telaLista.style.display = "block";
-            telaForm.style.display = "none";
-            btn.innerText = "➕ INDICAR NOVO";
-            btn.classList.remove('voltar');
-            titulo.innerText = "LISTA DE CONTATOS";
-            telaAtual = "lista";
+            telaLista.style.display = "block"; telaForm.style.display = "none";
+            btn.innerText = "➕ INDICAR NOVO"; btn.classList.remove('voltar');
+            titulo.innerText = "LISTA DE CONTATOS"; telaAtual = "lista";
         }
     }
 
@@ -158,13 +127,9 @@
         try {
             const res = await fetch(URL_SCRIPT);
             const rawData = await res.json();
-            dadosGerais = rawData.filter(i => i.Categoria && i.Contato)
-                .sort((a, b) => a.Categoria.localeCompare(b.Categoria));
-            renderizar(dadosGerais);
-            gerarFiltros(dadosGerais);
-        } catch (e) {
-            document.getElementById('msg-vazio').innerText = "Erro ao carregar lista.";
-        }
+            dadosGerais = rawData.filter(i => i.Categoria && i.Contato).sort((a, b) => a.Categoria.localeCompare(b.Categoria));
+            renderizar(dadosGerais); gerarFiltros(dadosGerais);
+        } catch (e) { document.getElementById('msg-vazio').innerText = "Erro ao carregar lista."; }
     }
 
     function renderizar(dados) {
@@ -199,9 +164,7 @@
     document.getElementById('formIndicar').onsubmit = async (e) => {
         e.preventDefault();
         const btn = document.getElementById('btnEnviar');
-        btn.innerText = "Enviando..."; 
-        btn.disabled = true;
-        
+        btn.innerText = "Enviando..."; btn.disabled = true;
         const formData = new FormData(e.target);
         const objeto = {
             morador: formData.get('morador'),
@@ -210,11 +173,8 @@
             nomeProfissional: formData.get('nomeProfissional'),
             telefone: formData.get('telefone')
         };
-        
         try {
             await fetch(URL_SCRIPT, { method: 'POST', mode: 'no-cors', body: JSON.stringify(objeto) });
-            
-            // MENSAGEM DE SUCESSO SEM O ENDEREÇO DO GITHUB
             document.getElementById('conteudo-form').innerHTML = `
                 <div style="text-align: center; padding: 40px 10px;">
                     <div style="font-size: 50px; margin-bottom: 15px;">✅</div>
@@ -223,13 +183,8 @@
                     <button onclick="location.reload()" class="btn-enviar" style="background: var(--azul); max-width: 220px; margin: 25px auto 0 auto;">VOLTAR PARA A LISTA</button>
                 </div>
             `;
-        } catch (err) {
-            alert("Erro ao enviar. Tente novamente.");
-            btn.innerText = "Publicar Indicação"; 
-            btn.disabled = false;
-        }
+        } catch (err) { alert("Erro ao enviar."); btn.innerText = "Publicar Indicação"; btn.disabled = false; }
     };
-
     buscarDados();
 </script>
 </body>

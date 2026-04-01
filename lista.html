@@ -7,37 +7,28 @@
         :root { --azul: #004a99; --azul-claro: #f0f4f8; --verde: #25d366; --borda: #e1e8ed; }
         body { margin: 0; font-family: 'Segoe UI', Tahoma, sans-serif; background: transparent; color: #333; }
         
-        /* Container Principal Branco */
-        .container-lista { background: white; border-radius: 8px; overflow: hidden; box-shadow: 0 2px 10px rgba(0,0,0,0.05); border: 1px solid var(--borda); }
+        .container-lista { background: white; border-radius: 8px; overflow: hidden; border: 1px solid var(--borda); }
 
-        /* Filtros horizontais no topo */
+        /* Filtros */
         .filtros { display: flex; overflow-x: auto; padding: 12px; gap: 8px; background: #fff; border-bottom: 1px solid var(--borda); scrollbar-width: none; }
         .filtros::-webkit-scrollbar { display: none; }
         .btn-filtro { background: var(--azul-claro); border: none; padding: 7px 14px; border-radius: 15px; white-space: nowrap; cursor: pointer; color: var(--azul); font-weight: bold; font-size: 11px; text-transform: uppercase; }
         .btn-filtro.ativo { background: var(--azul); color: white; }
 
-        /* Item da Lista (Linha Horizontal) */
+        /* Linha do Profissional */
         .linha-profissional { 
             display: flex; 
             align-items: center; 
             justify-content: space-between; 
             padding: 12px 15px; 
             border-bottom: 1px solid var(--borda);
-            transition: background 0.2s;
         }
         .linha-profissional:last-child { border-bottom: none; }
-        .linha-profissional:hover { background: #f9fbff; }
-
-        /* Textos */
-        .info { display: flex; align-items: center; gap: 15px; flex: 1; overflow: hidden; }
         
-        /* Categoria em fonte maior */
-        .cat-texto { font-size: 16px; font-weight: 800; color: var(--azul); min-width: 120px; text-transform: uppercase; }
-        
-        /* Nome em fonte menor */
-        .nome-texto { font-size: 14px; font-weight: 600; color: #555; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .info { display: flex; align-items: center; gap: 15px; flex: 1; }
+        .cat-texto { font-size: 15px; font-weight: 800; color: var(--azul); min-width: 130px; text-transform: uppercase; }
+        .nome-texto { font-size: 14px; font-weight: 600; color: #444; }
 
-        /* Botão WhatsApp */
         .btn-zap-link { 
             background: var(--verde); 
             color: white; 
@@ -49,17 +40,15 @@
             display: flex; 
             align-items: center; 
             gap: 5px; 
-            margin-left: 10px;
         }
-        .btn-zap-link:hover { background: #1ebe57; }
 
         #msg-vazio { text-align: center; color: #999; padding: 30px; font-style: italic; font-size: 13px; }
 
-        /* Ajuste para telas pequenas */
         @media (max-width: 500px) {
-            .cat-texto { font-size: 13px; min-width: 90px; }
-            .nome-texto { font-size: 12px; }
-            .btn-zap-link span { display: none; } /* Esconde o texto "WhatsApp" no mobile, deixa só o ícone */
+            .info { flex-direction: column; align-items: flex-start; gap: 2px; }
+            .cat-texto { font-size: 12px; min-width: auto; }
+            .nome-texto { font-size: 13px; }
+            .btn-zap-link span { display: none; }
         }
     </style>
 </head>
@@ -69,9 +58,8 @@
     <div class="filtros" id="botoesFiltros">
         <button class="btn-filtro ativo" onclick="filtrar('Todos', this)">Todos</button>
     </div>
-
     <div id="lista-corpo">
-        <div id="msg-vazio">Carregando guia...</div>
+        <div id="msg-vazio">Buscando profissionais...</div>
     </div>
 </div>
 
@@ -83,11 +71,18 @@
         try {
             const res = await fetch(URL_SCRIPT);
             const rawData = await res.json();
-            dadosGerais = rawData.filter(i => i.Categoria && i.Contato);
+            
+            // FILTRO E ORDENAÇÃO:
+            // 1. Remove linhas vazias
+            // 2. Ordena de A-Z pela Categoria
+            dadosGerais = rawData
+                .filter(i => i.Categoria && i.Contato)
+                .sort((a, b) => a.Categoria.localeCompare(b.Categoria));
+
             renderizar(dadosGerais);
             gerarFiltros(dadosGerais);
         } catch (e) {
-            document.getElementById('msg-vazio').innerText = "Nenhuma indicação encontrada.";
+            document.getElementById('msg-vazio').innerText = "Erro ao carregar dados.";
         }
     }
 
@@ -103,10 +98,9 @@
     function renderizar(dados) {
         const corpo = document.getElementById('lista-corpo');
         if(dados.length === 0) {
-            corpo.innerHTML = '<div id="msg-vazio">Nenhum profissional nesta categoria.</div>';
+            corpo.innerHTML = '<div id="msg-vazio">Nenhum profissional cadastrado.</div>';
             return;
         }
-        
         corpo.innerHTML = dados.map(item => `
             <div class="linha-profissional">
                 <div class="info">
@@ -129,6 +123,5 @@
 
     buscarDados();
 </script>
-
 </body>
 </html>

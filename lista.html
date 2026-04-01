@@ -1,1 +1,91 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        :root { --azul: #004a99; --azul-claro: #eef2f7; --verde: #25d366; }
+        body { margin: 0; font-family: 'Segoe UI', Tahoma, sans-serif; background: transparent; color: #333; }
+        
+        /* Filtros horizontais */
+        .filtros { display: flex; overflow-x: auto; padding: 10px; gap: 10px; background: white; border-bottom: 1px solid #eee; position: sticky; top: 0; z-index: 10; scrollbar-width: none; }
+        .filtros::-webkit-scrollbar { display: none; }
+        .btn-filtro { background: var(--azul-claro); border: none; padding: 8px 15px; border-radius: 20px; white-space: nowrap; cursor: pointer; color: var(--azul); font-weight: bold; font-size: 12px; transition: 0.2s; }
+        .btn-filtro.ativo { background: var(--azul); color: white; }
 
+        /* Grid de Cards */
+        .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 15px; padding: 15px; }
+        .card { background: white; border-radius: 10px; padding: 15px; box-shadow: 0 2px 8px rgba(0,0,0,0.08); border-top: 4px solid var(--azul); display: flex; flex-direction: column; justify-content: space-between; min-height: 120px; }
+        .tag { font-size: 9px; background: #f0f0f0; padding: 3px 7px; border-radius: 4px; font-weight: 800; text-transform: uppercase; color: #666; align-self: flex-start; }
+        .nome-prof { font-size: 17px; font-weight: bold; margin: 10px 0; color: #111; display: block; }
+        .btn-zap { display: flex; align-items: center; justify-content: center; gap: 8px; background: var(--verde); color: white; text-align: center; padding: 10px; border-radius: 6px; text-decoration: none; font-weight: bold; font-size: 14px; }
+        
+        #msg-vazio { text-align: center; width: 100%; color: #999; padding: 30px; font-style: italic; font-size: 14px; }
+    </style>
+</head>
+<body>
+
+<div class="filtros" id="botoesFiltros">
+    <button class="btn-filtro ativo" onclick="filtrar('Todos', this)">Todos</button>
+</div>
+
+<div class="grid" id="lista">
+    <div id="msg-vazio">Carregando profissionais...</div>
+</div>
+
+<script>
+    const URL_SCRIPT = "https://script.google.com/macros/s/AKfycbz3r-SbmkbGMN8w2TGv64eVUrlGPooHamByuMgO-myv2q8q3Upb8NK3DafDAZkBlo66Mw/exec"; 
+    let dadosGerais = [];
+
+    async function buscarDados() {
+        try {
+            const res = await fetch(URL_SCRIPT);
+            const rawData = await res.json();
+            dadosGerais = rawData.filter(i => i.Categoria && i.Contato);
+            renderizar(dadosGerais);
+            gerarFiltros(dadosGerais);
+        } catch (e) {
+            document.getElementById('msg-vazio').innerText = "Nenhuma indicação disponível.";
+        }
+    }
+
+    function gerarFiltros(dados) {
+        const cats = [...new Set(dados.map(i => i.Categoria))].sort();
+        const btnF = document.getElementById('botoesFiltros');
+        btnF.innerHTML = '<button class="btn-filtro ativo" onclick="filtrar(\'Todos\', this)">Todos</button>';
+        cats.forEach(c => {
+            btnF.innerHTML += `<button class="btn-filtro" onclick="filtrar('${c}', this)">${c}</button>`;
+        });
+    }
+
+    function renderizar(dados) {
+        const lista = document.getElementById('lista');
+        if(dados.length === 0) {
+            lista.innerHTML = '<div id="msg-vazio">Nenhum profissional encontrado.</div>';
+            return;
+        }
+        lista.innerHTML = dados.map(item => `
+            <div class="card">
+                <div>
+                    <span class="tag">${item.Categoria}</span>
+                    <strong class="nome-prof">${item.Contato}</strong>
+                </div>
+                <a href="https://wa.me/55${item.Telefone.replace(/\D/g,'')}" class="btn-zap" target="_blank">
+                    📱 WhatsApp
+                </a>
+            </div>
+        `).join('');
+    }
+
+    function filtrar(cat, elemento) {
+        document.querySelectorAll('.btn-filtro').forEach(b => b.classList.remove('ativo'));
+        elemento.classList.add('ativo');
+        if(cat === 'Todos') renderizar(dadosGerais);
+        else renderizar(dadosGerais.filter(i => i.Categoria === cat));
+    }
+
+    buscarDados();
+</script>
+
+</body>
+</html>

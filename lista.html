@@ -4,33 +4,75 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <style>
-        :root { --azul: #004a99; --azul-claro: #eef2f7; --verde: #25d366; }
+        :root { --azul: #004a99; --azul-claro: #f0f4f8; --verde: #25d366; --borda: #e1e8ed; }
         body { margin: 0; font-family: 'Segoe UI', Tahoma, sans-serif; background: transparent; color: #333; }
         
-        /* Filtros horizontais */
-        .filtros { display: flex; overflow-x: auto; padding: 10px; gap: 10px; background: white; border-bottom: 1px solid #eee; position: sticky; top: 0; z-index: 10; scrollbar-width: none; }
+        /* Container Principal Branco */
+        .container-lista { background: white; border-radius: 8px; overflow: hidden; box-shadow: 0 2px 10px rgba(0,0,0,0.05); border: 1px solid var(--borda); }
+
+        /* Filtros horizontais no topo */
+        .filtros { display: flex; overflow-x: auto; padding: 12px; gap: 8px; background: #fff; border-bottom: 1px solid var(--borda); scrollbar-width: none; }
         .filtros::-webkit-scrollbar { display: none; }
-        .btn-filtro { background: var(--azul-claro); border: none; padding: 8px 15px; border-radius: 20px; white-space: nowrap; cursor: pointer; color: var(--azul); font-weight: bold; font-size: 12px; transition: 0.2s; }
+        .btn-filtro { background: var(--azul-claro); border: none; padding: 7px 14px; border-radius: 15px; white-space: nowrap; cursor: pointer; color: var(--azul); font-weight: bold; font-size: 11px; text-transform: uppercase; }
         .btn-filtro.ativo { background: var(--azul); color: white; }
 
-        /* Grid de Cards */
-        .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 15px; padding: 15px; }
-        .card { background: white; border-radius: 10px; padding: 15px; box-shadow: 0 2px 8px rgba(0,0,0,0.08); border-top: 4px solid var(--azul); display: flex; flex-direction: column; justify-content: space-between; min-height: 120px; }
-        .tag { font-size: 9px; background: #f0f0f0; padding: 3px 7px; border-radius: 4px; font-weight: 800; text-transform: uppercase; color: #666; align-self: flex-start; }
-        .nome-prof { font-size: 17px; font-weight: bold; margin: 10px 0; color: #111; display: block; }
-        .btn-zap { display: flex; align-items: center; justify-content: center; gap: 8px; background: var(--verde); color: white; text-align: center; padding: 10px; border-radius: 6px; text-decoration: none; font-weight: bold; font-size: 14px; }
+        /* Item da Lista (Linha Horizontal) */
+        .linha-profissional { 
+            display: flex; 
+            align-items: center; 
+            justify-content: space-between; 
+            padding: 12px 15px; 
+            border-bottom: 1px solid var(--borda);
+            transition: background 0.2s;
+        }
+        .linha-profissional:last-child { border-bottom: none; }
+        .linha-profissional:hover { background: #f9fbff; }
+
+        /* Textos */
+        .info { display: flex; align-items: center; gap: 15px; flex: 1; overflow: hidden; }
         
-        #msg-vazio { text-align: center; width: 100%; color: #999; padding: 30px; font-style: italic; font-size: 14px; }
+        /* Categoria em fonte maior */
+        .cat-texto { font-size: 16px; font-weight: 800; color: var(--azul); min-width: 120px; text-transform: uppercase; }
+        
+        /* Nome em fonte menor */
+        .nome-texto { font-size: 14px; font-weight: 600; color: #555; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+        /* Botão WhatsApp */
+        .btn-zap-link { 
+            background: var(--verde); 
+            color: white; 
+            text-decoration: none; 
+            padding: 6px 12px; 
+            border-radius: 6px; 
+            font-size: 13px; 
+            font-weight: bold; 
+            display: flex; 
+            align-items: center; 
+            gap: 5px; 
+            margin-left: 10px;
+        }
+        .btn-zap-link:hover { background: #1ebe57; }
+
+        #msg-vazio { text-align: center; color: #999; padding: 30px; font-style: italic; font-size: 13px; }
+
+        /* Ajuste para telas pequenas */
+        @media (max-width: 500px) {
+            .cat-texto { font-size: 13px; min-width: 90px; }
+            .nome-texto { font-size: 12px; }
+            .btn-zap-link span { display: none; } /* Esconde o texto "WhatsApp" no mobile, deixa só o ícone */
+        }
     </style>
 </head>
 <body>
 
-<div class="filtros" id="botoesFiltros">
-    <button class="btn-filtro ativo" onclick="filtrar('Todos', this)">Todos</button>
-</div>
+<div class="container-lista">
+    <div class="filtros" id="botoesFiltros">
+        <button class="btn-filtro ativo" onclick="filtrar('Todos', this)">Todos</button>
+    </div>
 
-<div class="grid" id="lista">
-    <div id="msg-vazio">Carregando profissionais...</div>
+    <div id="lista-corpo">
+        <div id="msg-vazio">Carregando guia...</div>
+    </div>
 </div>
 
 <script>
@@ -45,7 +87,7 @@
             renderizar(dadosGerais);
             gerarFiltros(dadosGerais);
         } catch (e) {
-            document.getElementById('msg-vazio').innerText = "Nenhuma indicação disponível.";
+            document.getElementById('msg-vazio').innerText = "Nenhuma indicação encontrada.";
         }
     }
 
@@ -59,19 +101,20 @@
     }
 
     function renderizar(dados) {
-        const lista = document.getElementById('lista');
+        const corpo = document.getElementById('lista-corpo');
         if(dados.length === 0) {
-            lista.innerHTML = '<div id="msg-vazio">Nenhum profissional encontrado.</div>';
+            corpo.innerHTML = '<div id="msg-vazio">Nenhum profissional nesta categoria.</div>';
             return;
         }
-        lista.innerHTML = dados.map(item => `
-            <div class="card">
-                <div>
-                    <span class="tag">${item.Categoria}</span>
-                    <strong class="nome-prof">${item.Contato}</strong>
+        
+        corpo.innerHTML = dados.map(item => `
+            <div class="linha-profissional">
+                <div class="info">
+                    <span class="cat-texto">${item.Categoria}</span>
+                    <span class="nome-texto">${item.Contato}</span>
                 </div>
-                <a href="https://wa.me/55${item.Telefone.replace(/\D/g,'')}" class="btn-zap" target="_blank">
-                    📱 WhatsApp
+                <a href="https://wa.me/55${item.Telefone.replace(/\D/g,'')}" class="btn-zap-link" target="_blank">
+                    📱 <span>WhatsApp</span>
                 </a>
             </div>
         `).join('');
